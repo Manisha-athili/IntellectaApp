@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 
-export default function SearchBar({ searchTerm, setSearchTerm }) {
+export default function SearchBar({ searchTerm, setSearchTerm,selectedOption, setSelectedOption }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('Highest Rated');
   const dropdownRef = useRef(null);
 
   const options = [

@@ -1,6 +1,6 @@
 // components/PromptCard.jsx
 import React from 'react';
-import { MessageSquare, Share2, Star } from 'lucide-react';
+import { MessageSquare, Share2, Star,Link2 } from 'lucide-react';
 
 export default function PromptCard({ title, stars, comments, shares }) {
   return (
