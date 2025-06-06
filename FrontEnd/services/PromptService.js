@@ -1,4 +1,4 @@
-import api from '../src/api/axios';
+import api from '../src/api/promptAxios';
 
 
 
