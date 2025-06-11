@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { sendRegistrationOtp } from '../../services/authServices'; // Ensure correct API call
@@ -35,7 +35,7 @@ export default function Register() {
   };
 
   // Apply dark mode class
-  useState(() => {
+  useEffect(() => {
     const root = document.documentElement;
     darkMode ? root.classList.add('dark') : root.classList.remove('dark');
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
@@ -50,7 +50,7 @@ export default function Register() {
           className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:scale-110 transition"
           aria-label="Toggle theme"
         >
-          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          {/* {darkMode ? <Sun size={18} /> : <Moon size={18} />} */}
         </button>
       </div>
 

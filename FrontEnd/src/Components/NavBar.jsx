@@ -1,122 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Sun, 
-  Moon, 
-  Rocket, 
-  Menu, 
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Sun,
+  Moon,
+  Plus,
+  Menu,
   X,
-  Compass,
-  Trophy,
-  Code
-} from 'lucide-react';
-import '../Styles/navbar.css';
+  UserRound,
+  LogOut,
+  Star,
+  Settings,
+  User,
+  Mail,
+} from "lucide-react";
+import "../Styles/navbar.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedMode = localStorage.getItem('darkMode');
-      if (savedMode !== null) return JSON.parse(savedMode);
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return true;
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode !== null
+      ? JSON.parse(savedMode)
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
-  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  const token = localStorage.getItem("token");
+  const userEmail = localStorage.getItem("email");
 
   useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  
 
-  const toggleMode = () => {
-    setDarkMode(!darkMode);
+  const toggleMode = () => setDarkMode(!darkMode);
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setDropdownOpen(false);
+    navigate("/");
+    window.location.reload();
   };
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  // const navItems = [
-  //   { name: 'Explore', icon: <Compass size={16} className="nav-link-icon" /> },
-  //   { name: 'Leaderboard', icon: <Trophy size={16} className="nav-link-icon" /> },
-  //   { name: 'Playground', icon: <Code size={16} className="nav-link-icon" /> }
-  // ];
 
   return (
     <>
-      <nav className={`navbar ${scrolled ? 'navbar-scrolled' : 'navbar-default'}`}>
+      <nav
+        className="navbar  navbar-default"
+      >
         <div className="navbar-container">
           <div className="navbar-content">
-            {/* Logo */}
             <div className="navbar-logo">
               Intellecta<span className="navbar-logo-accent">Prompt</span>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Nav */}
             <div className="desktop-nav">
-              {/* <ul className="desktop-nav-list">
-                {navItems.map((item) => (
-                  <li key={item.name}>
-                    <a href="#" className="nav-link">
-                      {item.icon}
-                      {item.name}
-                      <span className="nav-link-underline"></span>
-                    </a>
-                  </li>
-                ))}
-              </ul> */}
-
               <div className="desktop-nav-buttons">
                 <button
                   onClick={toggleMode}
                   className="theme-toggle-btn"
-                  title={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
-                  aria-label="Toggle color scheme"
+                  title={`${darkMode ? "Toggle Light Mode" : "Toggle  Dark Mode"}`}
                 >
-                  {darkMode ? (
-                    <Sun size={18} className="theme-toggle-icon-light" />
-                  ) : (
-                    <Moon size={18} className="theme-toggle-icon-dark" />
-                  )}
+                  {darkMode ? <Sun size={20} className="text-yellow-300"  /> : <Moon size={18}  className="text-indigo-300" />}
                 </button>
+                {token && <button>
+                  <Plus size={34}  className="border rounded-full px-1.5 py-1.5 border-gray-600 text-gray-600"/>
+                </button>}
 
-                {/* <button className="upgrade-btn" title="Upgrade to Pro">
-                  <Rocket size={16} className="upgrade-btn-icon" />
-                  Upgrade
-                </button> */}
-
-                <div className="flex space-x-2">
-                  <button className="login-btn text-color-white">Log in</button>
-                  <button className="signup-btn">Sign up</button>
-                </div>
+                {!token ? (
+                  <>
+                    <div className="flex space-x-2">
+                      <button
+                        className="login-btn"
+                        onClick={() => navigate("/login")}
+                      >
+                        Log in
+                      </button>
+                      <button
+                        className="signup-btn"
+                        onClick={() => navigate("/register")}
+                      >
+                        Sign up
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="relative" ref={dropdownRef}>
+                    <button className="profile-btn " onClick={toggleDropdown}>
+                      <UserRound size={35} className="border rounded-full px-1.5 py-1.5 mt-1.5 border-gray-600 text-purple-500"/>
+                    </button>
+                    {dropdownOpen && (
+                      <div className="dropdown-menu border border-purple-300">
+                        <div className="dropdown-item">
+                          <Mail size={16} /> <span>{userEmail}</span>
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={() => navigate("/profile")}
+                        >
+                          <User size={16} /> Profile
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={() => navigate("/settings")}
+                        >
+                          <Settings size={16} /> Account Settings
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={() => navigate("/starred")}
+                        >
+                          <Star size={16} /> Starred Prompts
+                        </div>
+                        <div className="dropdown-item border-t border-purple-300 " id="logout" onClick={handleLogout}>
+                          <LogOut size={16} /> Logout
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Buttons */}
             <div className="mobile-nav-buttons">
               <button
                 onClick={toggleMode}
                 className="theme-toggle-btn"
                 title="Toggle color scheme"
               >
-                {darkMode ? (
-                  <Sun size={18} className="theme-toggle-icon-light" />
-                ) : (
-                  <Moon size={18} className="theme-toggle-icon-dark" />
-                )}
+                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
               </button>
               <button
                 onClick={toggleMobileMenu}
@@ -132,33 +157,54 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="mobile-menu animate-fade-in-down">
-            <ul className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <a href="#" className="mobile-menu-item">
-                    {item.icon}
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            <div className="pt-2 space-y-3">
-              {/* <button className="upgrade-btn w-full justify-center">
-                <Rocket size={16} className="upgrade-btn-icon" />
-                Upgrade
-              </button> */}
-
-              <div className="flex space-x-2">
-                <button className="login-btn w-full">Log in</button>
-                <button className="signup-btn w-full">Sign up</button>
+            {!token ? (
+              <div className="pt-2 space-y-3">
+                <div className="flex space-x-2">
+                  <button
+                    className="login-btn w-full"
+                    onClick={() => navigate("/login")}
+                  >
+                    Log in
+                  </button>
+                  <button
+                    className="signup-btn w-full"
+                    onClick={() => navigate("/register")}
+                  >
+                    Sign up
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="pt-2 space-y-3 text-left px-4">
+                <div className="text-sm text-gray-500 flex items-center gap-2">
+                  <Mail size={16} /> {userEmail}
+                </div>
+                <button
+                  className="dropdown-item w-full"
+                  onClick={() => navigate("/profile")}
+                >
+                  <User size={16} /> Profile
+                </button>
+                <button
+                  className="dropdown-item w-full"
+                  onClick={() => navigate("/settings")}
+                >
+                  <Settings size={16} /> Account Settings
+                </button>
+                <button
+                  className="dropdown-item w-full"
+                  onClick={() => navigate("/starred")}
+                >
+                  <Star size={16} /> Starred Prompts
+                </button>
+                <button className="dropdown-item w-full" onClick={handleLogout}>
+                  <LogOut size={16} /> Logout
+                </button>
+              </div>
+            )}
           </div>
         )}
       </nav>
-
-      {/* Add some spacing when mobile menu is open */}
       {mobileMenuOpen && <div className="mobile-menu-spacer"></div>}
     </>
   );

@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { loginUser } from '../../services/authServices';
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -35,14 +35,18 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await axios.post( loginUser, form);
+      const res = await loginUser(form);
       localStorage.setItem('token', res.data.token);
+      console.log(res.data)
       toast.success('Login successful!');
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
-    }
+    } finally {
+    setLoading(false);
+  }
   };
 
   return (
@@ -53,7 +57,7 @@ export default function Login() {
           className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:scale-110 transition-transform"
           aria-label="Toggle theme"
         >
-          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          {/* {darkMode ? <Sun size={18} /> : <Moon size={18} />} */}
         </button>
       </div>
 
@@ -106,7 +110,9 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold transition"
+            disabled={loading} 
+            className={`... ${loading ? 'opacity-50 cursor-not-allowed' : 'w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold transition'}`}
+            // className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold transition"
           >
             Log in
           </button>

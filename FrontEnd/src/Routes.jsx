@@ -10,6 +10,7 @@ import EditPrompt from "./Pages/EditPrompt";
 import ForkPrompt from "./Pages/ForkPrompt";
 import CreatePrompt from "./Pages/CreatePrompt";
 import PromptDetailPage from "./Pages/PromptDetailPage";
+import ProfilePage from "./Pages/ProfilePage";
 
 
 
@@ -25,14 +26,15 @@ export default function Router(){
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/submit" element={<CreatePrompt />} />
             <Route path="/prompt/:id/edit" element={<EditPrompt />} />
-            <Route path="/prompt/:id/fork" element={<ForkPrompt />} />8
+            <Route path="/prompt/:id/fork" element={<ForkPrompt />} />
             <Route path="/prompts/:id" element={<PromptDetailPage />} /> 
+             <Route path="/profile" element={<ProfilePage />} />
             {/* 
             <Route path="/submit" element={<CreatePrompt />} />
             <Route path="/editPrompt" element={<EditPrompt />} /> 
             <Route path="/forkPrompt" element={<ForkPrompt />} />
 
-            <Route path="/profile" element={<Profile />} />
+           
             <Route path="/profile-edit" element={<EditProfile/>} />
             <Route path="/stars" element={<StaredPrompts />} /> 
              
