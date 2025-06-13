@@ -1,76 +1,59 @@
-// src/pages/Page_ForkPrompt.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PromptForm from "../Components/PromptForm";
-import { forkPrompt } from "../services/PromptService";
+import { getPromptById, forkPrompt } from "../services/PromptService";
 
 export default function ForkPrompt() {
+  console.log("hi")
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [initialData, setInitialData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1) Fetch original prompt data
+  
   useEffect(() => {
-    async function loadPrompt() {
+    const fetchPrompt = async () => {
       try {
-        
-        const resp = await forkPrompt(id)
-                  
-         const data = await resp.json();
-
-        if (!resp.ok) throw new Error("Failed to fetch prompt");
-       
-        // We want to prefill the form, but clear out any “private” or ID fields.
-        const forkData = {
-          title: data.title + " (Forked)",
+        const data = await getPromptById(id);
+        setInitialData({
+          title: `${data.title} forked`,
           description: data.description,
           systemPrompt: data.systemPrompt,
           userMessages: data.userMessages,
           assistantMessages: data.assistantMessages,
           categories: data.categories,
           isPrivate: false,
-        };
-        setInitialData(forkData);
+        });
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load original prompt:", err);
       } finally {
         setLoading(false);
       }
-    }
-    loadPrompt();
+    };
+
+    fetchPrompt();
   }, [id]);
 
-  // 2) On submit, we do a “POST” to create a brand-new prompt (just like “create”)
-  const handleFork = async (formData) => {
+  // 2. Handle fork form submission
+  const handleForkSubmit = async (formData) => {
     try {
-      const resp = await fetch("/api/prompts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
-      if (!resp.ok) {
-        const body = await resp.json();
-        throw new Error(body.error || "Failed to fork prompt");
-      }
-      const newPrompt = await resp.json();
+      const userId = "your_user_id_here"; // TODO: replace with actual user ID (via context/auth)
+      const newPrompt = await forkPrompt(id, { ...formData, userId });
       navigate(`/prompt/${newPrompt._id}`);
     } catch (err) {
-      console.error("ForkPrompt error:", err);
+      console.error("Failed to fork prompt:", err);
     }
   };
 
-  if (loading)
-    return <div className="text-center text-white py-10">Loading…</div>;
-  if (!initialData)
-    return <div className="text-red-500">Original prompt not found.</div>;
-
+  if (loading) return <div className="text-center text-white py-10">Loading…</div>;
+  if (!initialData) return <div className="text-red-500 text-center">Prompt not found.</div>;
+  console.log(initialData)
   return (
-    <div className="max-w-3xl mx-auto mt-8">
+    <div className="max-w-3xl mx-auto mt-8 px-4">
       <PromptForm
         initialData={initialData}
-        onSubmit={handleFork}
+        onSubmit={handleForkSubmit}
         submitLabel="Fork Prompt"
       />
     </div>

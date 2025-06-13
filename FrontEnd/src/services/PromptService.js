@@ -35,12 +35,16 @@ export const toggleStarPrompt = (id) =>
   });
 
 
-export const getStarredPromptsByUser = () =>
-  api.get('/starred')
-
-export const forkPrompt = (id) =>
-  api.post(`/prompts/${id}/fork`, {
+export const getStarredPrompts = () =>
+  api.get('/prompts/s/starred',{
     headers: {
       Authorization: `Bearer ${token}`,
+    }})
+
+export const forkPrompt = (id,data) =>
+  api.post(`/prompts/${id}/fork`,{data}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+       'Content-Type': 'application/json' 
     },
   });
