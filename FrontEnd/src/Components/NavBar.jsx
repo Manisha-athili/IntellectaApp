@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Sun,
   Moon,
@@ -14,15 +14,10 @@ import {
 } from "lucide-react";
 import "../Styles/navbar.css";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from './CommonUI/DarkModeContext';
 
 export default function Navbar() {
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem("darkMode");
-    return savedMode !== null
-      ? JSON.parse(savedMode)
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
-
+    const { darkMode, setDarkMode } = useDarkMode();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -31,14 +26,14 @@ export default function Navbar() {
   const token = localStorage.getItem("token");
   const userEmail = localStorage.getItem("email");
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
+  // useEffect(() => {
+  //   if (darkMode) {
+  //     document.documentElement.classList.add("dark");
+  //   } else {
+  //     document.documentElement.classList.remove("dark");
+  //   }
+  //   localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  // }, [darkMode]);
 
   
 
@@ -62,20 +57,22 @@ export default function Navbar() {
         <div className="navbar-container">
           <div className="navbar-content">
             <div className="navbar-logo">
-              Intellecta<span className="navbar-logo-accent">Prompt</span>
+              <button onClick={()=>navigate('/')}>
+                Intellecta<span className="navbar-logo-accent">Prompt</span>
+              </button>
             </div>
 
             {/* Desktop Nav */}
             <div className="desktop-nav">
               <div className="desktop-nav-buttons">
                 <button
-                  onClick={toggleMode}
+                  onClick={() => setDarkMode(prev => !prev)}
                   className="theme-toggle-btn"
                   title={`${darkMode ? "Toggle Light Mode" : "Toggle  Dark Mode"}`}
                 >
                   {darkMode ? <Sun size={20} className="text-yellow-300"  /> : <Moon size={18}  className="text-indigo-300" />}
                 </button>
-                {token && <button>
+                {token && <button onClick={()=>navigate('/submit')}>
                   <Plus size={34}  className="border rounded-full px-1.5 py-1.5 border-gray-600 text-gray-600"/>
                 </button>}
 

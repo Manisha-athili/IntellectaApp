@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
-import { resetPassword } from '../../services/authServices';
+import { resetPassword } from '../services/authServices';
 
 export default function ResetPassword() {
   const [form, setForm] = useState({

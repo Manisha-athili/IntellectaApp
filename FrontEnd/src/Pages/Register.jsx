@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { sendRegistrationOtp } from '../../services/authServices'; // Ensure correct API call
+import { sendRegistrationOtp } from '../services/authServices'; // Ensure correct API call
 import { Sun, Moon } from 'lucide-react';
 
 export default function Register() {

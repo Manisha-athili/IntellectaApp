@@ -6,6 +6,7 @@ export default function PromptForm({
   onSubmit,
   submitLabel = "Submit Prompt",
   maxCategories = 5,
+   loading = false,
 }) {
   //
   // initialData can look like:
@@ -70,7 +71,7 @@ export default function PromptForm({
       });
     }
     setConversation(combined);
-  }, [initialData, maxCategories]);
+  }, []);
 
   // ─────── Handlers ───────
   const handleAddMessage = (role) => {
@@ -306,8 +307,9 @@ export default function PromptForm({
       <button
         type="submit"
         className="mt-6 w-full bg-white text-black py-2 font-semibold rounded"
+         disabled={loading}
       >
-        {submitLabel}
+        {loading ? "Submitting..." : submitLabel}
       </button>
     </form>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Sun, Moon } from 'lucide-react';
-import { verifyOtpAndRegisterUser, resendOtpRequest } from '../../services/authServices'; 
+import { verifyOtpAndRegisterUser, resendOtpRequest } from '../services/authServices'; 
 
 export default function VerifyOtp() {
   const [otp, setOtp] = useState('');

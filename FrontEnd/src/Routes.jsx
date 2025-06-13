@@ -11,6 +11,7 @@ import ForkPrompt from "./Pages/ForkPrompt";
 import CreatePrompt from "./Pages/CreatePrompt";
 import PromptDetailPage from "./Pages/PromptDetailPage";
 import ProfilePage from "./Pages/ProfilePage";
+import StarredPromptsPage from "./Pages/StarredPromptsPage";
 
 
 
@@ -29,10 +30,12 @@ export default function Router(){
             <Route path="/prompt/:id/fork" element={<ForkPrompt />} />
             <Route path="/prompts/:id" element={<PromptDetailPage />} /> 
              <Route path="/profile" element={<ProfilePage />} />
+             <Route path="/starred" element={<StarredPromptsPage />} />
+             <Route path="/forkPrompt/:id" element={<ForkPrompt />} />
             {/* 
             <Route path="/submit" element={<CreatePrompt />} />
             <Route path="/editPrompt" element={<EditPrompt />} /> 
-            <Route path="/forkPrompt" element={<ForkPrompt />} />
+            // 
 
            
             <Route path="/profile-edit" element={<EditProfile/>} />

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { loginUser } from '../../services/authServices';
+import { loginUser } from '../services/authServices';
 
 export default function Login() {
   const [loading, setLoading] = useState(false);

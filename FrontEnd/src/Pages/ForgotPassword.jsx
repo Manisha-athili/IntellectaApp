@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Sun, Moon } from 'lucide-react';
-import { forgotPassword } from '../../services/authServices'; // maps to sendOtpForReset
+import { forgotPassword } from '../services/authServices'; // maps to sendOtpForReset
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');

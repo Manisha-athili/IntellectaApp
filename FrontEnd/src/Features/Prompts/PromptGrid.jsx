@@ -6,7 +6,7 @@ import PromptCard from '../../Components/PromptCard';
 export default function PromptGrid({prompts}){
     // console.log(prompts)
     return (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-6 px-6 py-8 max-w-6xl mx-auto" '>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-6 px-6 py-8 max-w-7xl mx-auto" '>
             {/* {console.log(prompts._id)} */}
             {
                 prompts.map((prompt,idx)=>(
@@ -21,6 +21,7 @@ export default function PromptGrid({prompts}){
                     forkCount={ prompt.forkCount || 0} 
                     stars={prompt.stars || [1,23]}
                     createdAt ={prompt.createdAt ||0}
+                    author={""}
                     />
                     </Fragment>
                 ))

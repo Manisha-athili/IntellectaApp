@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PromptForm from "../Components/PromptForm";
+import { forkPrompt } from "../services/PromptService";
 
 export default function ForkPrompt() {
   const { id } = useParams();
@@ -14,10 +15,8 @@ export default function ForkPrompt() {
     async function loadPrompt() {
       try {
         
-        const resp = await fetch(`/api/prompts/${id}`, {
-          credentials: "include",
-        });
-        // console.log(resp.body)
+        const resp = await forkPrompt(id)
+                  
          const data = await resp.json();
 
         if (!resp.ok) throw new Error("Failed to fetch prompt");
@@ -34,7 +33,7 @@ export default function ForkPrompt() {
         };
         setInitialData(forkData);
       } catch (err) {
-        console.error(err,"eroe");
+        console.error(err);
       } finally {
         setLoading(false);
       }
