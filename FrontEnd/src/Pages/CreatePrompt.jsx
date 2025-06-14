@@ -22,7 +22,7 @@ export default function CreatePrompt() {
         autoClose: 3000,
       });
 
-      navigate(`/prompt/${newPrompt._id}`);
+      navigate(`/prompt`);
     } catch (err) {
       console.error("CreatePrompt error:", err);
       toast.update(loadingId, {

@@ -29,7 +29,7 @@ export default function ForgotPassword() {
       await forgotPassword({ email });
       toast.success('OTP sent to your email');
       localStorage.setItem('resetEmail', email);
-      navigate('/reset-password'); // Navigate to OTP + new password screen
+      navigate('/reset-password'); 
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error sending OTP');
     }

@@ -13,8 +13,8 @@ export const createPrompt = (data) =>
       Authorization: `Bearer ${token}`,
     },
   });
-export const updatePrompt = (id, data) =>
-  api.put(`/prompts/${id}`, data, {
+export const updatePrompt = (id, updatedData) =>
+  api.put(`/prompts/${id}`, updatedData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -26,6 +26,11 @@ export const deletePrompt = (id) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const incrementCopiedCount = async (promptId) => {
+  return await api.post(`/prompts/${promptId}/copy`);
+};
+
 
 export const toggleStarPrompt = (id) =>
   api.post(`/prompts/${id}/star`,{}, {

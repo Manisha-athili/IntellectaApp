@@ -13,7 +13,7 @@ export const getUserProfile = () =>
 export const getAccountSettings = async () => {
   const res = await api.get("/users/settings", {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.data;
@@ -23,7 +23,7 @@ export const getAccountSettings = async () => {
 export const updateAccountSettings = async (settings) => {
   const res = await api.put("/users/settings", settings, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.data;

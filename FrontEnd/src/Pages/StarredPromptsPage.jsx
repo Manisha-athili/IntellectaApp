@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-
 import SearchBar from "../Components/Searchbar";
 import FilterBar from "../Components/FilterBar";
 import PromptGrid from "../Features/Prompts/PromptGrid";
 import LoadingSpinner from "../Components/LoadingSpinner";
 import { getStarredPrompts } from "../services/PromptService";
+import { useDarkMode } from "../Components/CommonUI/DarkModeContext";
 
 export default function StarredPromptsPage() {
+  const { darkMode } = useDarkMode();
+
   const [starredPrompts, setStarredPrompts] = useState([]);
   const [filteredPrompts, setFilteredPrompts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,7 +16,6 @@ export default function StarredPromptsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Prompts");
   const [loading, setLoading] = useState(true);
 
-  // Fetch starred prompts from service
   useEffect(() => {
     const fetchStarredPrompts = async () => {
       try {
@@ -31,11 +32,9 @@ export default function StarredPromptsPage() {
     fetchStarredPrompts();
   }, []);
 
-  // Filtering and sorting logic
   useEffect(() => {
     let results = [...starredPrompts];
 
-    // Search filter
     if (searchTerm) {
       results = results.filter((prompt) =>
         prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,14 +46,12 @@ export default function StarredPromptsPage() {
       );
     }
 
-    // Category filter
     if (selectedCategory && selectedCategory !== "All Prompts") {
       results = results.filter((prompt) =>
         prompt.categories?.includes(selectedCategory)
       );
     }
 
-    // Sorting
     switch (selectedOption) {
       case "Newest":
         results.sort(
@@ -78,8 +75,8 @@ export default function StarredPromptsPage() {
   }, [searchTerm, selectedCategory, selectedOption, starredPrompts]);
 
   return (
-    <div className="container mx-auto px-4 py-6 pt-24">
-      <h1 className="text-3xl font-semibold mb-6">⭐ Starred Prompts</h1>
+    <div className={`min-h-screen pt-24 px-4 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
+      <h1 className="text-3xl font-semibold mb-6 text-center">⭐ Starred Prompts</h1>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <SearchBar
@@ -97,7 +94,7 @@ export default function StarredPromptsPage() {
       {loading ? (
         <LoadingSpinner />
       ) : filteredPrompts.length > 0 ? (
-        <PromptGrid prompts={filteredPrompts} />
+       <div className="flex justify-center "> <PromptGrid prompts={filteredPrompts} /></div>
       ) : (
         <p className="text-center text-gray-500 text-lg mt-10">
           No starred prompts found.

@@ -1,23 +1,24 @@
+// src/pages/ForkPrompt.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PromptForm from "../Components/PromptForm";
 import { getPromptById, forkPrompt } from "../services/PromptService";
+import { useDarkMode } from "../Components/CommonUI/DarkModeContext";
 
 export default function ForkPrompt() {
-  console.log("hi")
   const { id } = useParams();
   const navigate = useNavigate();
+  const { darkMode } = useDarkMode();
 
   const [initialData, setInitialData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     const fetchPrompt = async () => {
       try {
         const data = await getPromptById(id);
         setInitialData({
-          title: `${data.title} forked`,
+          title: `${data.title} (Forked)`,
           description: data.description,
           systemPrompt: data.systemPrompt,
           userMessages: data.userMessages,
@@ -35,27 +36,49 @@ export default function ForkPrompt() {
     fetchPrompt();
   }, [id]);
 
-  // 2. Handle fork form submission
   const handleForkSubmit = async (formData) => {
     try {
-      const userId = "your_user_id_here"; // TODO: replace with actual user ID (via context/auth)
-      const newPrompt = await forkPrompt(id, { ...formData, userId });
+      const newPrompt = await forkPrompt(id, formData);
       navigate(`/prompt/${newPrompt._id}`);
     } catch (err) {
       console.error("Failed to fork prompt:", err);
     }
   };
 
-  if (loading) return <div className="text-center text-white py-10">Loading…</div>;
-  if (!initialData) return <div className="text-red-500 text-center">Prompt not found.</div>;
-  console.log(initialData)
+  if (loading)
+    return (
+      <div
+        className={`text-center py-10 ${
+          darkMode ? "text-white" : "text-black"
+        }`}
+      >
+        Loading…
+      </div>
+    );
+
+  if (!initialData)
+    return (
+      <div className="text-red-500 text-center mt-10">
+        Prompt not found.
+      </div>
+    );
+
   return (
-    <div className="max-w-3xl mx-auto mt-8 px-4">
-      <PromptForm
-        initialData={initialData}
-        onSubmit={handleForkSubmit}
-        submitLabel="Fork Prompt"
-      />
+    <div
+      className={`relative overflow-hidden mx-auto pt-24 px-4 sm:px-6 md:px-10 lg:px-16 transition-colors duration-300 ${
+        darkMode ? "bg-black text-white" : "bg-white text-black"
+      }`}
+    >
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">
+          Fork this Prompt
+        </h1>
+        <PromptForm
+          initialData={initialData}
+          onSubmit={handleForkSubmit}
+          submitLabel="Fork Prompt"
+        />
+      </div>
     </div>
   );
 }
